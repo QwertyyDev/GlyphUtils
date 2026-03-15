@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SmallCapsConverter {
-    
+
     private static final Map<Character, Character> CONVERSION_MAP = new HashMap<>();
-    
+
     static {
         CONVERSION_MAP.put('a', 'ᴀ');
         CONVERSION_MAP.put('b', 'ʙ');
@@ -41,15 +41,12 @@ public class SmallCapsConverter {
         CONVERSION_MAP.put('y', 'ʏ');
         CONVERSION_MAP.put('z', 'ᴢ');
     }
-    
+
     public static String convert(String input) {
         StringBuilder result = new StringBuilder();
-        
         for (char c : input.toCharArray()) {
-            char lowerChar = Character.toLowerCase(c);
-            result.append(CONVERSION_MAP.getOrDefault(lowerChar, c));
+            result.append(CONVERSION_MAP.getOrDefault(Character.toLowerCase(c), c));
         }
-        
         return result.toString();
     }
 }

@@ -5,11 +5,12 @@ import com.qwertydev.glyphutils.inventory.InventoryButton;
 import com.qwertydev.glyphutils.inventory.InventoryGUI;
 import com.qwertydev.glyphutils.session.PlayerSession;
 import com.qwertydev.glyphutils.session.SessionType;
+import com.qwertydev.glyphutils.util.ChatComponentUtil;
 import com.qwertydev.glyphutils.util.GradientGenerator;
 import com.qwertydev.glyphutils.util.ItemBuilder;
 import com.cryptomorin.xseries.XMaterial;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -23,7 +24,7 @@ public class GradientMakerGUI extends InventoryGUI {
     
     @Override
     protected Inventory createInventory() {
-        String title = ChatColor.translateAlternateColorCodes('&', 
+        String title = org.bukkit.ChatColor.translateAlternateColorCodes('&', 
             plugin.getConfig().getString("messages.gradient-maker-title"));
         return Bukkit.createInventory(null, 54, title);
     }
@@ -45,9 +46,9 @@ public class GradientMakerGUI extends InventoryGUI {
                 playerSession.setWaitingForInput(true);
                 playerSession.setSessionType(SessionType.GRADIENT_TEXT_INPUT);
                 
-                String enterMsg = ChatColor.translateAlternateColorCodes('&', 
+                String enterMsg = org.bukkit.ChatColor.translateAlternateColorCodes('&', 
                     plugin.getConfig().getString("messages.enter-text"));
-                String cancelMsg = ChatColor.translateAlternateColorCodes('&', 
+                String cancelMsg = org.bukkit.ChatColor.translateAlternateColorCodes('&', 
                     plugin.getConfig().getString("messages.type-cancel"));
                 clicker.sendMessage(enterMsg);
                 clicker.sendMessage(cancelMsg);
@@ -60,13 +61,20 @@ public class GradientMakerGUI extends InventoryGUI {
                 String color = s.getColor1() != null ? s.getColor1() : "Not Set";
                 return new ItemBuilder(XMaterial.RED_WOOL)
                     .name("&c&lFirst Color")
-                    .lore("&7Current: &f" + color, "", "&7Click to set manually", "&7or use color palette below")
+                    .lore("&7Current: &f" + color, "", "&eClick to select color!")
                     .build();
             })
             .consumer(event -> {
                 Player clicker = (Player) event.getWhoClicked();
-                ColorPaletteGUI paletteGUI = new ColorPaletteGUI(plugin, true);
-                plugin.getGuiManager().openGUI(paletteGUI, clicker);
+                clicker.closeInventory();
+                
+                PlayerSession playerSession = plugin.getSessionManager().getSession(clicker.getUniqueId());
+                playerSession.setWaitingForInput(true);
+                playerSession.setSessionType(SessionType.GRADIENT_COLOR1_CHAT);
+                
+                clicker.sendMessage("");
+                ChatComponentUtil.sendColorPalette(clicker, true);
+                clicker.sendMessage("");
             })
         );
         
@@ -76,13 +84,20 @@ public class GradientMakerGUI extends InventoryGUI {
                 String color = s.getColor2() != null ? s.getColor2() : "Not Set";
                 return new ItemBuilder(XMaterial.BLUE_WOOL)
                     .name("&9&lSecond Color")
-                    .lore("&7Current: &f" + color, "", "&7Click to set manually", "&7or use color palette below")
+                    .lore("&7Current: &f" + color, "", "&eClick to select color!")
                     .build();
             })
             .consumer(event -> {
                 Player clicker = (Player) event.getWhoClicked();
-                ColorPaletteGUI paletteGUI = new ColorPaletteGUI(plugin, false);
-                plugin.getGuiManager().openGUI(paletteGUI, clicker);
+                clicker.closeInventory();
+                
+                PlayerSession playerSession = plugin.getSessionManager().getSession(clicker.getUniqueId());
+                playerSession.setWaitingForInput(true);
+                playerSession.setSessionType(SessionType.GRADIENT_COLOR2_CHAT);
+                
+                clicker.sendMessage("");
+                ChatComponentUtil.sendColorPalette(clicker, false);
+                clicker.sendMessage("");
             })
         );
         
@@ -174,10 +189,15 @@ public class GradientMakerGUI extends InventoryGUI {
                     Player clicker = (Player) event.getWhoClicked();
                     clicker.closeInventory();
                     
-                    String copyMsg = ChatColor.translateAlternateColorCodes('&', 
-                        plugin.getConfig().getString("messages.gradient-generated"));
-                    clicker.sendMessage(copyMsg);
-                    clicker.sendMessage(gradient);
+                    clicker.sendMessage("");
+                    clicker.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Gradient Result:");
+                    clicker.sendMessage("");
+                    clicker.spigot().sendMessage(ChatComponentUtil.createCopyableText(
+                        gradient,
+                        org.bukkit.ChatColor.translateAlternateColorCodes('&', gradient)
+                    ));
+                    clicker.sendMessage("");
+                    clicker.sendMessage(ChatColor.GREEN + "^ Click above to copy to your clipboard!");
                 })
             );
         }

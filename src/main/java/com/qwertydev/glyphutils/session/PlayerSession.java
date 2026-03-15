@@ -6,9 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlayerSession {
-    
-    private boolean waitingForInput;
-    private SessionType sessionType;
     private String inputText;
     private String color1;
     private String color2;
@@ -16,10 +13,10 @@ public class PlayerSession {
     private boolean italic;
     private boolean underline;
     private boolean strikethrough;
-    
+    private boolean waitingForInput;
+    private SessionType sessionType;
+
     public void reset() {
-        this.waitingForInput = false;
-        this.sessionType = null;
         this.inputText = null;
         this.color1 = null;
         this.color2 = null;
@@ -27,5 +24,7 @@ public class PlayerSession {
         this.italic = false;
         this.underline = false;
         this.strikethrough = false;
+        this.waitingForInput = false;
+        this.sessionType = null;
     }
 }

@@ -58,7 +58,7 @@ public class MainMenuGUI extends InventoryGUI {
                 .build())
             .consumer(event -> {
                 Player clicker = (Player) event.getWhoClicked();
-                SymbolCopierGUI symbolGUI = new SymbolCopierGUI(plugin, 0);
+                SymbolCopierGUI symbolGUI = new SymbolCopierGUI(plugin);
                 plugin.getGuiManager().openGUI(symbolGUI, clicker);
             })
         );

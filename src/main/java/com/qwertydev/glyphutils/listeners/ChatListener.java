@@ -86,6 +86,23 @@ public class ChatListener implements Listener {
             } else {
                 player.sendMessage(ChatColor.RED + "Invalid hex color! Use format: &#RRGGBB or #RRGGBB");
             }
+        } else if (type == SessionType.GRADIENT_COLOR1_CHAT || type == SessionType.GRADIENT_COLOR2_CHAT) {
+            if (isValidHexColor(message)) {
+                String formattedColor = formatHexColor(message);
+                if (type == SessionType.GRADIENT_COLOR1_CHAT) {
+                    session.setColor1(formattedColor);
+                } else {
+                    session.setColor2(formattedColor);
+                }
+                session.setWaitingForInput(false);
+                
+                plugin.getServer().getScheduler().runTask(plugin, () -> {
+                    GradientMakerGUI gui = new GradientMakerGUI(plugin);
+                    plugin.getGuiManager().openGUI(gui, player);
+                });
+            } else {
+                player.sendMessage(ChatColor.RED + "Invalid hex color! Use format: #RRGGBB");
+            }
         }
     }
     

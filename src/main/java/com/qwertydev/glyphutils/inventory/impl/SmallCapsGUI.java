@@ -5,11 +5,12 @@ import com.qwertydev.glyphutils.inventory.InventoryButton;
 import com.qwertydev.glyphutils.inventory.InventoryGUI;
 import com.qwertydev.glyphutils.session.PlayerSession;
 import com.qwertydev.glyphutils.session.SessionType;
+import com.qwertydev.glyphutils.util.ChatComponentUtil;
 import com.qwertydev.glyphutils.util.ItemBuilder;
 import com.qwertydev.glyphutils.util.SmallCapsConverter;
 import com.cryptomorin.xseries.XMaterial;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -23,7 +24,7 @@ public class SmallCapsGUI extends InventoryGUI {
     
     @Override
     protected Inventory createInventory() {
-        String title = ChatColor.translateAlternateColorCodes('&', 
+        String title = org.bukkit.ChatColor.translateAlternateColorCodes('&', 
             plugin.getConfig().getString("messages.small-caps-title"));
         return Bukkit.createInventory(null, 27, title);
     }
@@ -45,9 +46,9 @@ public class SmallCapsGUI extends InventoryGUI {
                 playerSession.setWaitingForInput(true);
                 playerSession.setSessionType(SessionType.SMALL_CAPS_INPUT);
                 
-                String enterMsg = ChatColor.translateAlternateColorCodes('&', 
+                String enterMsg = org.bukkit.ChatColor.translateAlternateColorCodes('&', 
                     plugin.getConfig().getString("messages.enter-text"));
-                String cancelMsg = ChatColor.translateAlternateColorCodes('&', 
+                String cancelMsg = org.bukkit.ChatColor.translateAlternateColorCodes('&', 
                     plugin.getConfig().getString("messages.type-cancel"));
                 clicker.sendMessage(enterMsg);
                 clicker.sendMessage(cancelMsg);
@@ -69,10 +70,16 @@ public class SmallCapsGUI extends InventoryGUI {
                     Player clicker = (Player) event.getWhoClicked();
                     clicker.closeInventory();
                     
-                    String copyMsg = ChatColor.translateAlternateColorCodes('&', 
-                        plugin.getConfig().getString("messages.text-copied"));
-                    clicker.sendMessage(copyMsg);
-                    clicker.sendMessage(converted);
+                    clicker.sendMessage("");
+                    clicker.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "Small Caps Result:");
+                    clicker.sendMessage(ChatColor.GRAY + "Original: " + ChatColor.WHITE + session.getInputText());
+                    clicker.sendMessage("");
+                    clicker.spigot().sendMessage(ChatComponentUtil.createCopyableText(
+                        converted, 
+                        ChatColor.AQUA + converted
+                    ));
+                    clicker.sendMessage("");
+                    clicker.sendMessage(ChatColor.GREEN + "^ Click above to copy to your clipboard!");
                 })
             );
         }

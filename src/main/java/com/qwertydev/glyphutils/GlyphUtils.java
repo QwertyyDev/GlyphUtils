@@ -1,5 +1,6 @@
 package com.qwertydev.glyphutils;
 
+import com.qwertydev.glyphutils.commands.ColorSelectCommand;
 import com.qwertydev.glyphutils.commands.UtilsCommand;
 import com.qwertydev.glyphutils.inventory.gui.GUIListener;
 import com.qwertydev.glyphutils.inventory.gui.GUIManager;
@@ -29,6 +30,7 @@ public class GlyphUtils extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(chatListener, this);
         
         getCommand("utils").setExecutor(new UtilsCommand(this));
+        getCommand("glyphutils-selectcolor").setExecutor(new ColorSelectCommand(this));
         
         getLogger().info("GlyphUtils has been enabled!");
     }

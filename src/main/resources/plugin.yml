@@ -11,6 +11,8 @@ commands:
     aliases: [util, glyph]
     permission: glyphutils.use
     permission-message: You do not have permission to use this command.
+  glyphutils-selectcolor:
+    description: Internal command for color selection
 
 permissions:
   glyphutils.use:

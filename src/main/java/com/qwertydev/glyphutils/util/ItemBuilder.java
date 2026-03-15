@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemBuilder {
-    
+
     private final ItemStack item;
-    
+
     public ItemBuilder(XMaterial material) {
         this.item = material.parseItem();
     }
-    
+
     public ItemBuilder name(String name) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -23,7 +23,7 @@ public class ItemBuilder {
         }
         return this;
     }
-    
+
     public ItemBuilder lore(String... loreLines) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
@@ -36,7 +36,7 @@ public class ItemBuilder {
         }
         return this;
     }
-    
+
     public ItemStack build() {
         return item;
     }

@@ -9,24 +9,29 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class UtilsCommand implements CommandExecutor {
-    
+
     private final GlyphUtils plugin;
-    
+
     public UtilsCommand(GlyphUtils plugin) {
         this.plugin = plugin;
     }
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
             return true;
         }
-        
+
         Player player = (Player) sender;
-        MainMenuGUI mainMenu = new MainMenuGUI(plugin);
-        plugin.getGuiManager().openGUI(mainMenu, player);
-        
+
+        if (!player.hasPermission("glyphutils.use")) {
+            player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+            return true;
+        }
+
+        MainMenuGUI gui = new MainMenuGUI(plugin);
+        plugin.getGuiManager().openGUI(gui, player);
         return true;
     }
 }
